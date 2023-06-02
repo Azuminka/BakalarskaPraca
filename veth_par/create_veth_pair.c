@@ -1,6 +1,6 @@
 #define _GNU_SOURCE //Povolenie GNU rozsireni
 #include <stdlib.h> //EXIT_FAILURE
-#include <stdio.h>  //sprintf(), perror(), printf()
+#include <stdio.h>  //sprintf(), printf()
 #include <unistd.h> //access()
 
 int main(int argc, char *argv[]) {
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
     sprintf(path1, "/var/run/netns/%s", argv[1]);
     sprintf(path2, "/var/run/netns/%s", argv[2]);
-    //Kontrolujem, ci sietove menne priestory existuju
+    //Kontrola, ci sietove menne priestory existuju
     if(access(path1, F_OK) != 0) {
         printf("Sieťový menný priestor %s neexistuje\n", argv[1]);
         return EXIT_FAILURE;
