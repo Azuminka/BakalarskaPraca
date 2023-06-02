@@ -11,14 +11,14 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Kontrola existencie sieťového menného priestoru
+    // Definujeme cesty k suborom, ktoré reprezentuju sietove menne priestory
     char path[256];
     sprintf(path, "/var/run/netns/%s", argv[1]);
     if(access(path, F_OK) != 0) {
         printf("Sieťový menný priestor %s neexistuje\n", argv[1]);
         return EXIT_FAILURE;
     }
-    // Definujeme cesty k suborom, ktoré reprezentuju sietove menne priestory
+    
     char cmd[256];
     int status;
 
