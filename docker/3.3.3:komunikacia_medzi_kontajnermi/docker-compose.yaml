@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  sender:
+    build:
+      context: ./sender
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+
+  receiver:
+    build:
+      context: ./receiver
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    hostname: cowsay-container
+
+networks:
+  mynetwork:
