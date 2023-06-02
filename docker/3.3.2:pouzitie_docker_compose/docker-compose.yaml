@@ -1,0 +1,8 @@
+version: '3'
+services:
+  cowsay:
+    image: my_cowsay_image
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: ["Ahoj, svet!"]
