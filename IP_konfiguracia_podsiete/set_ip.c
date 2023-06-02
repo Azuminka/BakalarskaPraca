@@ -3,6 +3,8 @@
 #include <sys/wait.h>   //WEXITSTATUS
 #include <stdlib.h>     //EXIT_FAILURE, EXIT_SUCCESS
 #include <stdio.h>       //sprintf(), perror(), printf()
+#include <arpa/inet.h>  // inet_pton()
+#include <string.h>     //atoi()
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
@@ -17,6 +19,20 @@ int main(int argc, char *argv[]) {
     sprintf(path, "/var/run/netns/%s", argv[1]);
     if (access(path, F_OK) == -1) {
         perror("Sieťový menný priestor neexistuje");
+        return EXIT_FAILURE;
+    }
+
+    // Kontrola, ci je maska platna
+    int mask = atoi(argv[3]);   
+    if (mask <= 0 || mask >= 32) {
+        printf("Neplatná maska podsiete\n");
+        return EXIT_FAILURE;
+    }
+    
+    // Kontrola, či je IP adresa vo validnom formáte
+    struct sockaddr_in sa;
+    if (inet_pton(AF_INET, argv[2], &(sa.sin_addr)) == 0) {
+        printf("Neplatná IP adresa\n");
         return EXIT_FAILURE;
     }
 
