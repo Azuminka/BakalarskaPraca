@@ -6,7 +6,7 @@
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         //Kontrola, ci bol zadany spravny pocet argumentov
-        //Program ocakava argument: nazov menneho priestoru 
+        //Program ocakava dva argumenty: nazov menneho priestoru a trasu 
         printf("Použitie: %s [sieťový_menný_priestor]\n", argv[0]);
         return EXIT_FAILURE;
     }

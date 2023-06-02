@@ -1,10 +1,7 @@
-#define _GNU_SOURCE
-#include <sched.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <stdio.h>
+#define _GNU_SOURCE     //Povolenie GNU rozsireni 
+#include <unistd.h>     //access()
+#include <stdlib.h>     //EXIT_FAILURE
+#include <stdio.h>      //sprintf(), perror(), printf()
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
