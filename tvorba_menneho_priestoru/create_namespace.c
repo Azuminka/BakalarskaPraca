@@ -1,4 +1,4 @@
-#define _GNU_SOURCE     //Povolenie GNU rozsireni 
+#define _GNU_SOURCE     //Povolenie GNU rozsirenie 
 #include <sched.h>      //clone()
 #include <unistd.h>     //getpid()
 #include <stdlib.h>     //malloc(), free(), EXIT_FAILURE

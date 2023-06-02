@@ -1,4 +1,4 @@
-#define _GNU_SOURCE     //Povolenie GNU rozsireni
+#define _GNU_SOURCE     //Povolenie GNU rozsirenie
 #include <sched.h>      //setns()
 #include <unistd.h>     //access(), fork()
 #include <fcntl.h>      //O_RDONLY

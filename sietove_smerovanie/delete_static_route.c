@@ -1,4 +1,4 @@
-#define _GNU_SOURCE //Povolenie GNU rozsireni
+#define _GNU_SOURCE //Povolenie GNU rozsirenie
 #include <unistd.h> // access()
 #include <stdlib.h> //printf(), perror(), sprintf()
 #include <stdio.h>  //printf(), perror(), sprintf()

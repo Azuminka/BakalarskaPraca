@@ -1,4 +1,4 @@
-#define _GNU_SOURCE //Povolenie GNU rozsireni
+#define _GNU_SOURCE //Povolenie GNU rozsirenie
 #include <stdlib.h> //EXIT_FAILURE
 #include <stdio.h>  //sprintf(), printf()
 #include <unistd.h> //access()

@@ -1,4 +1,4 @@
-#define _GNU_SOURCE     //Povolenie GNU rozsireni 
+#define _GNU_SOURCE     //Povolenie GNU rozsirenie
 #include <unistd.h>     //access() 
 #include <sys/wait.h>   //WEXITSTATUS
 #include <stdlib.h>     //EXIT_FAILURE, EXIT_SUCCESS
@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]) {
     if (argc != 4) {
         //Kontrola, ci bol zadany spravny pocet argumentov
-        //Program ocakava dva argumenty: nazov menneho priestoru, IP adresu a masku 
+        //Program ocakava tri argumenty: nazov menneho priestoru, IP adresu a masku 
         printf("Použitie: %s [sieťový_menný_priestor] [IP_adresa] [maska_podsiete]\n", argv[0]);
         return EXIT_FAILURE;
     }
