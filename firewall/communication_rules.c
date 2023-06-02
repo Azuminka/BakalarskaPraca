@@ -4,8 +4,8 @@
 #include <stdio.h>      // printf(), sprintf(), perror()
 
 int main(int argc, char *argv[]) {
-        //Kontrola, ci bol zadany spravny pocet argumentov
-        //Program ocakava argument: nazov menneho priestoru 
+    //Kontrola, ci bol zadany spravny pocet argumentov
+    //Program ocakava argument: nazov menneho priestoru 
     if (argc != 2) {
         printf("Použitie: %s [sieťový_menný_priestor]\n", argv[0]);
         return EXIT_FAILURE;
