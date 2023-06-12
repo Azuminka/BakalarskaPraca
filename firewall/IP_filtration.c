@@ -1,43 +1,43 @@
-#define _GNU_SOURCE     // Povolenie GNU rozsirenie 
+#define _GNU_SOURCE     // GNU extension 
 #include <unistd.h>     // access() 
 #include <stdlib.h>     // EXIT_FAILURE
 #include <stdio.h>      // printf(), sprintf(), perror()
 #include <arpa/inet.h>  // inet_pton()
 
 int main(int argc, char *argv[]) {
-    //Kontrola, ci bol zadany spravny pocet argumentov
-    //Program ocakava dva argumenty: nazov menneho priestoru, IP adresa 
+    //Check whether the correct number of arguments was entered
+    //The program expects two arguments: namespace name, IP address 
     if (argc != 3) {
-        printf("Použitie: %s [sieťový_menný_priestor] [IP_adresa]\n", argv[0]);
+        printf("Run: %s [network_namespace] [IP_address]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    // Definujeme cesty k suborom, ktore reprezentuju sietove menne priestory
+    // Defines paths to files that represent network namespaces
     char path[256];
     sprintf(path, "/var/run/netns/%s", argv[1]);
     if (access(path, F_OK) == -1) {
-        perror("Sieťový menný priestor neexistuje");
+        perror("Namespace doesn't exist.");
         return EXIT_FAILURE;
     }
 
-    // Kontrola, či je IP adresa vo validnom formáte
+    // Checking whether the IP address is in a valid format
     struct sockaddr_in sa;
     if (inet_pton(AF_INET, argv[2], &(sa.sin_addr)) == 0) {
-        printf("Neplatná IP adresa\n");
+        printf("Invalid IP address\n");
         return EXIT_FAILURE;
     }
 
     char cmd[256];
     int ret;
     
-    // Nastavenie pravidiel pre firewall v sieťovom mennom priestore
+    // Setting firewall rules in the network namespace
     sprintf(cmd, "ip netns exec %s iptables -A OUTPUT -d %s -p icmp --icmp-type echo-request -j DROP", argv[1], argv[2]);
     ret = system(cmd);
     if (ret == -1) {
-        perror("Chyba pri nastavovaní pravidiel pre firewall");
+        perror("Error setting firewall rules");
         return EXIT_FAILURE;
     } else if (WEXITSTATUS(ret) != 0) {
-        printf("Nastavovanie pravidiel pre firewall zlyhalo, príkaz skončil s chybou %d\n", WEXITSTATUS(ret));
+        printf("Setting firewall rules failed, command ended with error %d\n", WEXITSTATUS(ret));
         return EXIT_FAILURE;
     }
 

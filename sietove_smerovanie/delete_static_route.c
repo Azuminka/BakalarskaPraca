@@ -1,11 +1,11 @@
-#define _GNU_SOURCE //Povolenie GNU rozsirenie
-#include <unistd.h> // access()
-#include <stdlib.h> //printf(), perror(), sprintf()
-#include <stdio.h>  //printf(), perror(), sprintf()
+#define _GNU_SOURCE     //GNU extension
+#include <unistd.h>     // access()
+#include <stdlib.h>     //printf(), perror(), sprintf()
+#include <stdio.h>      //printf(), perror(), sprintf()
 #include <arpa/inet.h>  //inet_aton()
-#include <string.h>     // funkciu strtok()
+#include <string.h>     // strtok()
 
-// Kontrola, ci je hodnota masky v platnom rozsahu
+// Checking whether the mask value is within the valid range
 int valid_mask(int mask) {
     if (mask >= 0 && mask <= 32) {
         return 1;
@@ -15,50 +15,50 @@ int valid_mask(int mask) {
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
-        //Kontrola, ci bol zadany spravny pocet argumentov
-        //Program ocakava dva argumenty: nazov menneho priestoru a trasu 
-        printf("Použitie: %s [sieťový_menný_priestor] [sieťová_trasa]\n", argv[0]);
+        //Check whether the correct number of arguments was entered
+        //The program expects two arguments: namespace name and route
+        printf("Run: %s [network_namespace] [route]\n", argv[0]);
         return EXIT_FAILURE;
     }
     
-    // Oddelenie IP adresy a masky
+    // IP address and mask separation
     char *ip_address = strtok(argv[2], "/");
     char *mask_str = strtok(NULL, "/");
     
-    // Kontrola, či sú IP adresa a maska v platných formátoch
+    // Checking that the IP address and mask are in valid formats
     struct sockaddr_in sa;
     if (inet_pton(AF_INET, ip_address, &(sa.sin_addr)) == 0) {
-        printf("Neplatná IP adresa\n");
+        printf("Invalid IP address\n");
         return EXIT_FAILURE;
     }
     int mask = atoi(mask_str);
     if (!valid_mask(mask)) {
-        printf("Neplatná maska podsiete\n");
+        printf("Invalid subnet mask\n");
         return EXIT_FAILURE;
     }
 
     char cmd[256];
     int ret;
 
-    // Skontroluje, či sieťový menný priestor existuje
+    // Checks if the namespace exists
     sprintf(cmd, "/var/run/netns/%s", argv[1]);
     if (access(cmd, F_OK) == -1) {
-        perror("Sieťový menný priestor neexistuje");
+        perror("Namespace doesn't exist.");
         return EXIT_FAILURE;
     }
 
-    // Pokúsi sa odstrániť trasu
+    // Will try to remove the route
     sprintf(cmd, "ip netns exec %s ip route del %s", argv[1], argv[2]);
     ret = system(cmd);
     if (ret == -1) {
-        perror("Chyba pri odstraňovaní trasy");
+        perror("Error deleting route");
         return EXIT_FAILURE;
     } else if (WEXITSTATUS(ret) != 0) {
-        printf("Odstraňovanie trasy zlyhalo, príkaz skončil chybovým kódom:  %d\n", WEXITSTATUS(ret));
+        printf("Failed to remove the route, the command ended with an error code:  %d\n", WEXITSTATUS(ret));
         return EXIT_FAILURE;
     }
 
-    printf("Trasa úspešne odstránená\n");
+    printf("Route successfully deleted\n");
     return EXIT_SUCCESS;
 }
 

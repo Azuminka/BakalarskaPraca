@@ -1,4 +1,4 @@
-#define _GNU_SOURCE     //Povolenie GNU rozsirenie
+#define _GNU_SOURCE     //GNU extension
 #include <sched.h>      //setns()
 #include <unistd.h>     //access(), fork()
 #include <fcntl.h>      //O_RDONLY
@@ -7,19 +7,19 @@
 #include <stdio.h>      //printf(), perror()
 
 int main(int argc, char *argv[]) {
-    //Kontrola, ci bol zadany spravny pocet argumentov
-    //Program ocakava argument: nazov menneho priestoru
+    //Check whether the correct number of arguments was entered
+    //The program expects an argument: namespace name
     if (argc != 2) {
-        printf("Použitie: %s [sieťový_menný_priestor]\n", argv[0]);
+        printf("Run: %s [network_namespace]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    // Definujeme cesty k suborom, ktoré reprezentuju sietove menne priestory
+    // Defines paths to files that represent network namespaces
     char path[256];
     sprintf(path, "/var/run/netns/%s", argv[1]);
-    //Kontrola, ci sietove menne priestory existuju
+    //Check whether network namespaces exist
     if(access(path, F_OK) != 0) {
-        printf("Sieťový menný priestor %s neexistuje\n", argv[1]);
+        printf("Namespace %s doesn't exist.\n", argv[1]);
         return EXIT_FAILURE;
     }
 
@@ -27,29 +27,29 @@ int main(int argc, char *argv[]) {
     int fd;
     char cmd[256];
 
-    // vytvorenie dvoch procesov
+    // Creating two processes
     pid = fork();
     if (pid == -1) {
-        perror("Nepodarilo sa vytvoriť proces");
+        perror("Failed to create process");
         return EXIT_FAILURE;
     } else if (pid == 0) {
         // detsky proces - prepojenie na sietovy menny priestor
         sprintf(cmd, "/var/run/netns/%s", argv[1]);
         fd = open(cmd, O_RDONLY);
         if (fd == -1) {
-            perror("Nepodarilo sa otvorit menný priestor");
+            perror("Could not open namespace");
             return EXIT_FAILURE;
         }
 
         if (setns(fd, CLONE_NEWNET) == -1) {
-            perror("Nepodarilo sa prepnúť do menného priestoru");
+            perror("Failed to switch to namespace");
             return EXIT_FAILURE;
         }
 
-        // detsky proces vykonava nejaku sietovu aktivitu
+        // The child process is performing some network activity
         system("ping -c 3 8.8.8.8");
     } else {
-        // rodicovsky proces caka na dokoncenie detinskeho procesu
+        // The parent process waits for the child process to complete
         waitpid(pid, NULL, 0);
     }
 

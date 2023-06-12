@@ -1,35 +1,35 @@
-#define _GNU_SOURCE     // Povolenie GNU rozsirenie 
+#define _GNU_SOURCE     // GNU extension 
 #include <unistd.h>     // access() 
 #include <stdlib.h>     // EXIT_FAILURE
 #include <stdio.h>      // printf(), sprintf(), perror()
 
 int main(int argc, char *argv[]) {
-    //Kontrola, ci bol zadany spravny pocet argumentov
-    //Program ocakava argument: nazov menneho priestoru 
+    //Check whether the correct number of arguments was entered
+    //The program expects an argument: namespace name 
     if (argc != 2) {
-        printf("Použitie: %s [sieťový_menný_priestor]\n", argv[0]);
+        printf("Run: %s [network_namespace]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    // Definujeme cesty k suborom, ktore reprezentuju sietove menne priestory
+    // Defines paths to files that represent network namespaces
     char path[256];
     sprintf(path, "/var/run/netns/%s", argv[1]);
     if (access(path, F_OK) == -1) {
-        perror("Sieťový menný priestor neexistuje");
+        perror("Namespace doesn't exist.");
         return EXIT_FAILURE;
     }
 
     char cmd[256];
     int ret;
 
-    // Nastavenie pravidla INPUT DROP pre firewall
+    // Setting the INPUT DROP rule for the firewall
     sprintf(cmd, "ip netns exec %s iptables -P INPUT DROP", argv[1]);
     ret = system(cmd);
     if (ret == -1) {
-        perror("Chyba pri nastavovaní pravidla INPUT DROP");
+        perror("Error setting INPUT DROP rule");
         return EXIT_FAILURE;
     } else if (WEXITSTATUS(ret) != 0) {
-        printf("Nastavovanie pravidla INPUT DROP zlyhalo, príkaz skončil s chybou %d\n", WEXITSTATUS(ret));
+        printf("Setting the INPUT DROP rule failed, the command ended with an error %d\n", WEXITSTATUS(ret));
         return EXIT_FAILURE;
     }
 
@@ -37,21 +37,21 @@ int main(int argc, char *argv[]) {
     sprintf(cmd, "ip netns exec %s iptables -P OUTPUT ACCEPT", argv[1]);
     ret = system(cmd);
     if (ret == -1) {
-        perror("Chyba pri nastavovaní pravidla OUTPUT ACCEPT");
+        perror("Error setting the OUTPUT ACCEPT rule");
         return EXIT_FAILURE;
     } else if (WEXITSTATUS(ret) != 0) {
-        printf("Nastavovanie pravidla OUTPUT ACCEPT zlyhalo, príkaz skončil s chybou %d\n", WEXITSTATUS(ret));
+        printf("Setting the OUTPUT ACCEPT rule failed, the command ended with an error %d\n", WEXITSTATUS(ret));
         return EXIT_FAILURE;
     }
 
-    // Nastavenie pravidla FORWARD DROP pre firewall
+    // Setting the FORWARD DROP rule for the firewall
     sprintf(cmd, "ip netns exec %s iptables -P FORWARD DROP", argv[1]);
     ret = system(cmd);
     if (ret == -1) {
-        perror("Chyba pri nastavovaní pravidla FORWARD DROP");
+        perror("Error setting the FORWARD DROP rule");
         return EXIT_FAILURE;
     } else if (WEXITSTATUS(ret) != 0) {
-        printf("Nastavovanie pravidla FORWARD DROP zlyhalo, príkaz skončil s chybou %d\n", WEXITSTATUS(ret));
+        printf("Setting the FORWARD DROP rule failed, the command ended with an error %d\n", WEXITSTATUS(ret));
         return EXIT_FAILURE;
     }
 
