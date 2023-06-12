@@ -1,47 +1,47 @@
-# Prehľad kontajnerizačných mechanizmov v OS Linux
-## Bakalárska práca
+# Container mechanisms in Linux OS
+## Bachelor thesis
 
-Tento repozitár obsahuje zdrojové kódy v prgramovacom jazyku C, ktoré slúžia na demonštráciu konfigurácie v sieťových menných priestoroch. Repozitár taktiež obsahuje krátke ukážky k práci s Dockerom. Tieto kódy majú edukačný charakter a ich cieľom je oboznámiť čitateľa s funkcionalitami, aké so sebou prinášajú sieťové menné priestory a Docker.
+This repository contains source code in the C programming language aimed at demonstrating network namespace configuration. The repository also includes short examples of working with Docker. These codes have an educational purpose and aim to familiarize the reader with the functionalities offered by network namespaces and Docker.
 
-Bakalárska práca: https://www.overleaf.com/read/ftcvvfdzzytd
+Bachelor thesis: https://www.overleaf.com/read/ftcvvfdzzytd
 
-### Manuál
+### Manual
 
-Pri spúšťaní programov je nutné použiť sudo.
+When running programs, it is necessary to use sudo.
 
-Kompilácia: ` gcc nazov_programu.c -o nazov `
+Compilation: ` gcc program_name.c -o name `
 
-Spustenie: ` sudo ./nazov argumenty `
+Run: ` sudo ./name arguments `
 
-| Názov programu        | Argumenty                              | Spustenie                                 | Adresár                         |
+| Program name          | Arguments                              | Run                                       | Directory                       |
 | --------------------- | -------------------------------------- | ----------------------------------------- |-------------------------------- |
-| create_namespace.c    |                                        | ./create_namespace                        | tvorba_menneho_priestoru        |
-| move_device.c         | [menny_priestor] [sietove_zariadenie]  | ./move_device ns eth0                     | pripojenie_sietoveho_zariadenia |
-| create_veth_pair.c    | [menny_priestor1] [menny_priestor2]    | ./create_veth_pair ns1 ns2                | veth_par                        |
-| delete_veth_pair.c    | [menny_priestor1] [menny_priestor2]    | ./ delete_veth_pair ns1 ns2               | veth_par                        |
-| migrate_namespace.c   |                                        | ./migrate_namespace                       | migracia_menneho_priestoru      |
-| add_static_route.c    | [menny_priestor] [trasa]               | ./add_static_route ns 10.0.2.15/24        | sietove_smerovanie              |
-| delete_static_route.c | [menny_priestor] [trasa]               | ./delete_static_route ns 10.0.2.15/24     | sietove_smerovanie              |
-| show_routing_table.c  | [menny_priestor]                       | ./show_routing_table ns                   | sietove_smerovanie              |
-| set_ip.c              | [menny_priestor] [ip_adresa] [maska]   | ./set_ip ns 10.0.2.15 24                  | IP_konfiguracia_podsiete        |
-| set_primary_ip.c      | [menny_priestor] [ip_adresa] [maska]   | ./set_primary_ip ns 10.0.2.15 24          | IP_konfiguracia_podsiete        |
-| create_vlan.c         | [menny_priestor] [VLAN_id]             | ./create_vlan ns 2                        | vlan                            |
-| configure_proxy.c     | [menny_priestor] [proxy_server]        | ./configure_proxy ns http://1.1.1.1 8080  | proxy                           |
-| communication_rules.c | [menny_priestor]                       | ./communication_rules ns                  | firewall                        |
-| ip_filtration.c       | [menny_priestor] [ip_adresa]           | ./ip_filtration ns 10.0.2.15              | firewall                        |
+| create_namespace.c    |                                        | ./create_namespace                        | create_namespace                |
+| move_device.c         | [namespace] [network_device]           | ./move_device ns eth0                     | connect_network_device          |
+| create_veth_pair.c    | [namespace1] [namespace2]              | ./create_veth_pair ns1 ns2                | veth_pair                       |
+| delete_veth_pair.c    | [namespace1] [namespace2]              | ./ delete_veth_pair ns1 ns2               | veth_pair                       |
+| migrate_namespace.c   |                                        | ./migrate_namespace                       | migrate_network_namesapce       |
+| add_static_route.c    | [namespace] [route]                    | ./add_static_route ns 10.0.2.15/24        | routing                         |
+| delete_static_route.c | [namespace] [route]                    | ./delete_static_route ns 10.0.2.15/24     | routing                         |
+| show_routing_table.c  | [namespace]                            | ./show_routing_table ns                   | routing                         |
+| set_ip.c              | [namespace] [ip_adress] [mask]         | ./set_ip ns 10.0.2.15 24                  | IP_subnet_configuration         |
+| set_primary_ip.c      | [namespace] [ip_adress] [mask]         | ./set_primary_ip ns 10.0.2.15 24          | IP_subnet_configuration         |
+| create_vlan.c         | [namespace] [VLAN_id]                  | ./create_vlan ns 2                        | vlan                            |
+| configure_proxy.c     | [namespace] [proxy_server]             | ./configure_proxy ns http://1.1.1.1 8080  | proxy                           |
+| communication_rules.c | [namespace]                            | ./communication_rules ns                  | firewall                        |
+| ip_filtration.c       | [namespace] [ip_adress]                | ./ip_filtration ns 10.0.2.15              | firewall                        |
 
-### Užitočné príkazy:
-Zobrazí všetky sieťové menné priestory: ` ip netns `
+### Useful commands:
+Show all network namespaces: ` ip netns `
 
-Vykoná príkaz v kontexte sieťového menného priestoru: ` sudo ip netns exec nazov_menneho_priestoru prikaz `
+Execute the command within the network namespace: ` sudo ip netns exec namespace prikaz `
 
-Pridá IP adresu sieťovému rozhraniu: `ip addr add xxx.xxx.xxx.xxx/xx dev nazov_sietoveho_rozhrania `
+Add IP adress to network interface: `ip addr add xxx.xxx.xxx.xxx/xx dev network_interface_name `
 
-Aktivuje sieťové rozhranie: `ifconfig nazov_sietoveho_rozhrania up `
+Activate network interface: `ifconfig network_interface_name up `
 
-Presunie sieťové rozhranie z menného priestoru na hostiteľský systém: `ip netns exec nazov_menneho_priestoru ip link set nazov_sietoveho_rozhrania netns 1 `
+Move network interface from network namespace to host: `ip netns exec network_interface_name ip link set network_interface_name netns 1 `
 
-Pridá cestu do smerovacej tabuľky: `ip route add xxx.xxx.xxx.xxx/xx dev nazov_sietoveho_rozhrania `
+Add route to routing table: `ip route add xxx.xxx.xxx.xxx/xx dev network_interface_name `
 
 
 
