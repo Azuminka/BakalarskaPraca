@@ -22,7 +22,7 @@ Run: ` sudo ./name arguments `
 | migrate_namespace.c   |                                        | ./migrate_namespace                       | migracia_menneho?priestoru       |
 | add_static_route.c    | [namespace] [route]                    | ./add_static_route ns 10.0.2.15/24        | sietove_smerovanie                         |
 | delete_static_route.c | [namespace] [route]                    | ./delete_static_route ns 10.0.2.15/24     | sietove_smerovanie                         |
-| show_routing_table.c  | [namespace]                            | ./show_routing_table ns                   | routing                         |
+| show_routing_table.c  | [namespace]                            | ./show_routing_table ns                   | sietove_smerovanie                        |
 | set_ip.c              | [namespace] [ip_address] [mask]         | ./set_ip ns 10.0.2.15 24                  | IP_konfiguracia_podsiete         |
 | set_primary_ip.c      | [namespace] [ip_address] [mask]         | ./set_primary_ip ns 10.0.2.15 24          | IP_konfiguracia_podsiete         |
 | create_vlan.c         | [namespace] [VLAN_id]                  | ./create_vlan ns 2                        | vlan                            |
